@@ -5,13 +5,20 @@ import (
 	"crypto/tls"
 	"log"
 	"os"
+	"flag"
 
 	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/scram"
 )
 
+var (
+	topic = flag.String("topic", "my-topic", "topic name")
+)
+
 func main() {
+	flag.Parse()
+
 	// Загрузите переменные среды из файла .env
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -35,7 +42,7 @@ func main() {
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{KAFKA_HOSTNAME},
 		GroupID: "consumer-group-id",
-		Topic:   "topic-C",
+		Topic:   *topic,
 		Dialer:  dialer,
 	})
 	

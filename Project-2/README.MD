@@ -12,6 +12,8 @@ go get github.com/joho/godotenv
 Start:
 
 ```
-go run .\consumer.go
+go run .\consumer.go -topic=topic-A
+go run .\consumer.go -topic=topic-B
+go run .\consumer.go -topic=topic-C
 go run .\producer.go
 ```
