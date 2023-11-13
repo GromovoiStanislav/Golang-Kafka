@@ -1,4 +1,4 @@
-## Kafka with github.com/segmentio/kafka-go simple exapmple
+## Kafka with github.com/segmentio/kafka-go writing to multiple topics
 
 Setup:
 
