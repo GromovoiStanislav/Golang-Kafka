@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"log"
 	"os"
-	"time"
+
 
 	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
@@ -39,29 +39,15 @@ func main() {
 		Topic:   "my-topic",
 		Dialer:  dialer,
 	})
-	// r.SetOffset(42)
-
+	
 	ctx := context.Background()
 
-	//Reading all messages within a time range
-	startTime := time.Now().Add(-time.Hour)
-	endTime := time.Now()
-	r.SetOffsetAt(ctx, startTime)
-	
-	
 	for {
-		m, err := r.FetchMessage(ctx)
+		m, err := r.ReadMessage(ctx)
 		if err != nil {
 			break
 		}
-		if m.Time.After(endTime) {
-			break
-		}
-
 		log.Printf("message at topic/partition/offset %v/%v/%v: %s\n", m.Topic, m.Partition, m.Offset,  string(m.Value))
-		if err := r.CommitMessages(ctx, m); err != nil {
-			log.Fatal("failed to commit messages:", err)
-		}
 	}
 	
 	if err := r.Close(); err != nil {
