@@ -5,3 +5,4 @@
 - 3 - Kafka with github.com/segmentio/kafka-go Explicit Commits
 - 4 - Kafka with github.com/segmentio/kafka-go example
 - 5 - Kafka with github.com/segmentio/kafka-go Bridge
+- 6 - Kafka with github.com/segmentio/kafka-go example consumer-logger
