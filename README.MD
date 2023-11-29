@@ -7,3 +7,4 @@
 - 5 - Kafka with github.com/segmentio/kafka-go Bridge
 - 6 - Kafka with github.com/segmentio/kafka-go example consumer-logger
 - 7 - Kafka with github.com/segmentio/kafka-go example producer-random
+- 8 - Kafka with github.com/segmentio/kafka-go example producer-api
