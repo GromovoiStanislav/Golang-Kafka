@@ -11,3 +11,4 @@
 - 9 - Kafka with github.com/segmentio/kafka-go example consumer-mongo-db
 - 10 - Kafka and Avro with github.com/segmentio/kafka-go simple exapmple
 - 11 - Kafka with github.com/IBM/sarama simple exapmple
+- 12 - Kafka with github.com/IBM/sarama simple exapmple
