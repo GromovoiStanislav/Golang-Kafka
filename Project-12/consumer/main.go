@@ -72,8 +72,6 @@ func main() {
 				messageCount++
 				fmt.Printf("Received message: %s %s #%d\n",msg.Key, msg.Value, messageCount)
 				//fmt.Println("Received messages", string(msg.Key), string(msg.Value))
-				consumer.CommitOffset()
-				consumer.MarkOffset()
 			case <-signals:
 				log.Println("Interrupt is detected")
 				doneCh <- struct{}{}
