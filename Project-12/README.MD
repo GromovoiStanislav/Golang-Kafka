@@ -14,8 +14,6 @@ go get github.com/joho/godotenv
 Start:
 
 ```
-
-
 go run .\consumer\
 go run .\producer\
 ```
