@@ -29,6 +29,7 @@ func main() {
 
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
+	config.Consumer.Offsets.AutoCommit.Enable = true
 
 	config.Net.SASL.Enable = true
 	config.Net.SASL.Handshake = true
@@ -41,12 +42,12 @@ func main() {
 	config.Net.TLS.Enable = true
 	config.Net.TLS.Config = &tlsConfig
 
-	master, err := sarama.NewConsumer(brokers, config)
+	consumer, err := sarama.NewConsumer(brokers, config)
 	if err != nil {
 		log.Panic(err)
 	}
 	defer func() {
-		if err := master.Close(); err != nil {
+		if err := consumer.Close(); err != nil {
 			log.Panic(err)
 		}
 	}()
@@ -54,30 +55,47 @@ func main() {
 
 	// fmt.Println(config.Consumer.Offsets.AutoCommit.Enable)
 
-
-	consumer, err := master.ConsumePartition(topic, 1, sarama.OffsetOldest)
+	partitionList, err := consumer.Partitions(topic) //get all partitions on the given topic
 	if err != nil {
-		log.Panic(err)
+		fmt.Println("Erro ao listar as particoes ", err)
 	}
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt)
 	
 	doneCh := make(chan struct{})
-	go func() {
-		for {
-			select {
-			case err := <-consumer.Errors():
-				log.Println(err)
-			case msg := <-consumer.Messages():
-				messageCount++
-				fmt.Printf("Received message: %s %s #%d\n",msg.Key, msg.Value, messageCount)
-				//fmt.Println("Received messages", string(msg.Key), string(msg.Value))
-			case <-signals:
-				log.Println("Interrupt is detected")
-				doneCh <- struct{}{}
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, os.Interrupt)
+
+
+	for _, partition := range partitionList {
+		pc, _ := consumer.ConsumePartition(topic, partition, sarama.OffsetOldest)
+
+		go func(pc sarama.PartitionConsumer) {
+		
+			for {
+				select {
+				case err := <-pc.Errors():
+					log.Println(err)
+				case msg := <-pc.Messages():
+					messageCount++
+					fmt.Printf("Received message: %s %d %s #%d\n",msg.Key,msg.Partition, msg.Value, messageCount)
+				
+		
+				case <-signals:
+					log.Println("Interrupt is detected")
+					doneCh <- struct{}{}
+				}
 			}
-		}
-	}()
+
+		}(pc)
+	}
+
+
+
+
+
+
+
+
 	<-doneCh
 	log.Println("Processed", messageCount, "messages")
 }
