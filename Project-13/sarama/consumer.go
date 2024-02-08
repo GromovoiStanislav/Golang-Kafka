@@ -30,6 +30,8 @@ func (s *SaramaLocal) GetMessagesFromTopic() {
 	defer consumer.Close()
 
 	subscribe(s.Topic, consumer)
+
+	select {}
 }
 
 func subscribe(topic string, consumer sarama.Consumer) {
@@ -41,6 +43,7 @@ func subscribe(topic string, consumer sarama.Consumer) {
 	initialOffset := sarama.OffsetOldest
 
 	for _, partition := range partitionList {
+		
 		pc, _ := consumer.ConsumePartition(topic, partition, initialOffset)
 
 		go func(pc sarama.PartitionConsumer) {

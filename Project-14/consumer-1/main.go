@@ -5,16 +5,14 @@ import (
 	"log"
 	"os"
 	"crypto/tls"
-	"os/signal"
+
 
 	"github.com/IBM/sarama"
 	_ "github.com/joho/godotenv/autoload"
+
+	. "kafka-example/common"
 )
 
-
-var (
-	messageCount = 0
-)
 
 func main() {
 
@@ -53,43 +51,12 @@ func main() {
 	}()
 
 
-	// fmt.Println(config.Consumer.Offsets.AutoCommit.Enable)
+	partitionConsumer, _ := consumer.ConsumePartition(topic, 1, sarama.OffsetNewest)
 
-	partitionList, err := consumer.Partitions(topic) //get all partitions on the given topic
-	if err != nil {
-		fmt.Println("Erro ao listar as particoes ", err)
+	channel := partitionConsumer.Messages()
+
+	for {
+		msg := <-channel
+		fmt.Println(string(msg.Value)) 
 	}
-	
-	doneCh := make(chan struct{})
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt)
-
-
-	for _, partition := range partitionList {
-		pc, _ := consumer.ConsumePartition(topic, partition, sarama.OffsetOldest)
-
-		go func(pc sarama.PartitionConsumer) {
-		
-			for {
-				select {
-				case err := <-pc.Errors():
-					log.Println(err)
-				case msg := <-pc.Messages():
-					messageCount++
-					fmt.Printf("Received message: %s %d %s #%d\n",msg.Key,msg.Partition, msg.Value, messageCount)
-				
-		
-				case <-signals:
-					log.Println("Interrupt is detected")
-					doneCh <- struct{}{}
-				}
-			}
-
-		}(pc)
-	}
-
-	
-	<-doneCh
-	log.Println("Processed", messageCount, "messages")
 }
