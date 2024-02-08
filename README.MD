@@ -12,3 +12,4 @@
 - 10 - Kafka and Avro with github.com/segmentio/kafka-go simple exapmple
 - 11 - Kafka with github.com/IBM/sarama simple exapmple
 - 12 - Kafka with github.com/IBM/sarama simple exapmple
+- 13 - Kafka with github.com/IBM/sarama simple exapmple
