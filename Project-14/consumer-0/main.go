@@ -26,8 +26,6 @@ func main() {
 
 
 	config := sarama.NewConfig()
-	config.Consumer.Return.Errors = true
-	config.Consumer.Offsets.AutoCommit.Enable = true
 
 	config.Net.SASL.Enable = true
 	config.Net.SASL.Handshake = true

@@ -48,12 +48,24 @@ func main() {
 		}
 	}()
 
-	partitionConsumer, _ := consumer.ConsumePartition(topic, 1, sarama.OffsetNewest)
 
-	channel := partitionConsumer.Messages()
+	partitionList, err := consumer.Partitions(topic) //get all partitions on the given topic
+	for _, partition := range partitionList {
+		
+		partitionConsumer, _ := consumer.ConsumePartition(topic, partition, sarama.OffsetNewest)
 
-	for {
-		msg := <-channel
-		fmt.Println(string(msg.Value)) 
+		go func(partitionConsumer sarama.PartitionConsumer) {
+
+			channel := partitionConsumer.Messages()
+
+			for {
+				msg := <-channel
+				fmt.Println("partition", msg.Partition, string(msg.Value)) 
+			}
+
+		}(partitionConsumer)
 	}
+
+	select {}
+
 }

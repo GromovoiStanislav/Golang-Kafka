@@ -16,5 +16,8 @@ Start:
 ```
 go run .\consumer-0
 go run .\consumer-1
+go run .\consumer-all
+go run .\consumer-group
+
 go run .\producer
 ```
