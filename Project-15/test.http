@@ -1,0 +1,40 @@
+@api = http://localhost:3000
+@id=c07d4722-342d-4e19-a7e8-d342dc0e0ba9
+
+
+###
+POST {{api}}/openAccount
+Content-Type: application/json
+
+{
+  "accountHolder": "Tom",
+  "accountType": 1,
+  "openingBalance": 50
+}
+
+###
+POST {{api}}/depositFund
+Content-Type: application/json
+
+{
+  "id": "c07d4722-342d-4e19-a7e8-d342dc0e0ba9",
+  "amount": 5
+}
+
+
+###
+POST {{api}}/withdrawFund
+Content-Type: application/json
+
+{
+  "id": "c07d4722-342d-4e19-a7e8-d342dc0e0ba9",
+  "amount": 15
+}
+
+###
+POST {{api}}/closeAccount
+Content-Type: application/json
+
+{
+  "id": "c07d4722-342d-4e19-a7e8-d342dc0e0ba9"
+}
