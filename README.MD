@@ -15,3 +15,4 @@
 - 13 - Kafka with github.com/IBM/sarama simple exapmple
 - 14 - Kafka with github.com/IBM/sarama exapmples
 - 15 - Kafka with github.com/IBM/sarama with Fiber & Gorm (mysql)
+- 16 - Kafka with github.com/IBM/sarama exapmple

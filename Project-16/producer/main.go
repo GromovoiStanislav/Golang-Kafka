@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	topic = "my-topic"
+	topic = "test-topic"
 )
 
 func main() {
